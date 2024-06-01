@@ -34,8 +34,6 @@ const getUserByDate = async (req,res) => {
         const endDate = new Date(date + "T23:59:59Z")
         console.log(startDate, endDate)
 
-        
-
         const result = await User.where('updatedAt').gte(startDate).lte(endDate).where('status').equals(condition).exec()
 
         return res.status(200).json({
@@ -151,9 +149,9 @@ const updateUser = async (req,res) => {
         
         const test_result = driverLicense(body_exam, theory_exam, practice_exam)
 
-        userExist.body_test = test_result.body_text
-        userExist.theory_test = test_result.theory_text
-        userExist.practice_test = test_result.practice_text
+        userExist.body_test = body_exam ? test_result.body_text : userExist.body_test
+        userExist.theory_test = theory_exam ? test_result.theory_text : userExist.theory_test
+        userExist.practice_test = practice_exam != undefined ? test_result.practice_text : userExist.practice_test
         userExist.status = test_result.status
 
         const result = await userExist.save()
